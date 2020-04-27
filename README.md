@@ -5,7 +5,7 @@ The drinking game 'Kings' programmed using Colyseus
 ## :crossed_swords: Usage
 
 ```
-npm init colyseus-app
+npm start
 ```
 
 ## Structure
