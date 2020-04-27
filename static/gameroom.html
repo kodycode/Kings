@@ -3,7 +3,29 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <style>
-      body { font-family: Tahoma, Geneva, sans-serif; }
+      body { 
+        font-family: Tahoma, 
+        Geneva, sans-serif;
+        background-color: #444444;
+      }
+      .card {
+        border: 1px solid #878683;
+        color: #878683;
+      }
+      #chat-container {
+        position: fixed;
+        bottom: 20px;
+      }
+      #message-container {
+        height: 400px;
+        width: 397px;
+        background-color: #082c6c;
+        overflow: auto;
+        color: #bebebe;
+      }
+      #form {
+        
+      }
     </style>
     <link rel="stylesheet" type="text/css" href="gameroom.css">
     <!-- colyseus.js client -->
@@ -11,52 +33,69 @@
   </head>
   <body>
     <ul class='circle-container'>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
-        <li><span>a</span></li>
+        <li><div class="card">Card 1</div></li>
     </ul>
+
+    <div id="chat-container">
+      <div id="message-container">
+        <div id="messages"></div>
+      </div>
+
+      <form id="form">
+        <input type="text" id="input" value="" size="52" autofocus autocomplete="off"/>
+      </form>
+    </div>
+
     <script>
       var host = window.document.location.host.replace(/:.*/, '');
 
       var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':'+location.port : ''));
-      // client.joinOrCreate("chat").then(room => {
-      //   console.log("joined");
-      //   room.onStateChange.once(function(state) {
-      //       console.log("initial room state:", state);
-      //   });
 
-      //   // new room state
-      //   room.onStateChange(function(state) {
-      //       // this signal is triggered on each patch
-      //   });
+      var circle_container = document.querySelector(".circle-container");
+      var cards = "";
+      var degrees = 0;
+      for (var i = 0; i < 52; i++) {
+        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);">Card ${i}</div></li>`;
+        degrees += 6.92;
+      }
 
-      //   // listen to patches coming from the server
-      //   room.onMessage("messages", function(message) {
-      //       var p = document.createElement("p");
-      //       p.innerText = message;
-      //       document.querySelector("#messages").appendChild(p);
-      //   });
+      circle_container.innerHTML = cards;
 
-      //   // send message to room on submit
-      //   document.querySelector("#form").onsubmit = function(e) {
-      //       e.preventDefault();
+      client.joinOrCreate("kings").then(room => {
+        console.log("joined");
+        room.onStateChange.once(function(state) {
+            console.log("initial room state:", state);
+        });
 
-      //       var input = document.querySelector("#input");
+        // new room state
+        room.onStateChange(function(state) {
+            // this signal is triggered on each patch
+        });
 
-      //       console.log("input:", input.value);
+        // listen to patches coming from the server
+        room.onMessage("messages", function(message) {
+            var p = document.createElement("p");
+            p.innerText = message;
+            document.querySelector("#messages").appendChild(p);
+            var msg_container = document.querySelector("#message-container");
+            msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
 
-      //       // send data to room
-      //       room.send("message", input.value);
+        // send message to room on submit
+        document.querySelector("#form").onsubmit = function(e) {
+            e.preventDefault();
 
-      //       // clear input
-      //       input.value = "";
-      //   }
-      // });
+            var input = document.querySelector("#input");
+
+            console.log("input:", input.value);
+
+            // send data to room
+            room.send("message", input.value);
+
+            // clear input
+            input.value = "";
+        }
+      });
 
     </script>
   </body>

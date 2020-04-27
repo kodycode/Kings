@@ -38,9 +38,8 @@
 }
 
 .circle-container {
-  @include on-circle($item-count: 8, $circle-size: 20em, $item-size: 6em); 
-  margin: 5em auto 0;
-  border: solid 5px tomato;
+  @include on-circle($item-count: 52, $circle-size: 40vw, $item-size: 6em); 
+  margin: 10vh auto 0;
   
   img { 
     display: block; 

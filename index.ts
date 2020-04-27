@@ -31,7 +31,7 @@ app.use(
 );
 
 // register your room handlers
-gameServer.define('kings', GameRoom);
+gameServer.define('kings', GameRoom).enableRealtimeListing();
 
 /**
  * Register @colyseus/social routes
