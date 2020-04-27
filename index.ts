@@ -41,8 +41,17 @@ gameServer.define('kings', GameRoom).enableRealtimeListing();
  */
 // app.use("/", socialRoutes);
 
-app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}))
 app.use('/', express.static(path.join(__dirname, "static")));
+
+app.route('/')
+      .get((req, res) => {
+        res.sendFile(__dirname + '/static/gameroom.html');
+});
+
+app.route('/help')
+      .get((req, res) => {
+        res.sendFile(__dirname + '/static/help.html');
+});
 
 // register colyseus monitor AFTER registering your room handlers
 app.use("/colyseus", monitor());

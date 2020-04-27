@@ -19,12 +19,12 @@
       #message-container {
         height: 400px;
         width: 397px;
-        background-color: #082c6c;
+        background-color: #ffd162;
         overflow: auto;
-        color: #bebebe;
+        color: black;
       }
-      #form {
-        
+      #messages p {
+        margin-left: 5px;
       }
     </style>
     <link rel="stylesheet" type="text/css" href="gameroom.css">
@@ -55,7 +55,7 @@
       var cards = "";
       var degrees = 0;
       for (var i = 0; i < 52; i++) {
-        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);">Card ${i}</div></li>`;
+        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);">Card ${i+1}</div></li>`;
         degrees += 6.92;
       }
 
