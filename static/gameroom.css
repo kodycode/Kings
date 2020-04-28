@@ -1,11 +1,44 @@
+body {
+  background-color: #444444 !important; }
+
+.bx--text-input {
+  background-color: #e4e4e4 !important;
+  border: none !important;
+  border-bottom: 1px solid #8d8d8d !important; }
+
+.bx--text-input:focus {
+  outline: none !important; }
+
+.bx--list__item {
+  color: white !important; }
+
+.bx--list--nested > .bx--list__item::before {
+  position: absolute !important;
+  left: 1rem !important;
+  content: '\0025AA' !important; }
+
+.bx--modal-container {
+  background-color: #4c4c4c !important; }
+
+.bx--modal-header__heading {
+  color: white !important; }
+
+.bx--modal-content > * {
+  color: white; }
+
+.bx--modal-close:hover {
+  background-color: #7c7c7c; }
+
+.bx--modal-close:focus {
+  border: 2px solid transparent !important; }
+
 .circle-container {
   position: relative;
   width: 40vw;
   height: 40vw;
-  padding: 0;
   border-radius: 50%;
   list-style: none;
-  margin: 15vh auto 0; }
+  margin: 11vh auto 0; }
   .circle-container > * {
     display: block;
     position: absolute;
@@ -127,3 +160,114 @@
     transition: .15s; }
     .circle-container img:hover, .circle-container img:active {
       filter: grayscale(0); }
+
+.user-joined {
+  color: green; }
+
+.user-left {
+  color: red; }
+
+.card {
+  border: 1px solid #878683;
+  background-image: url("img/back.svg");
+  background-size: contain;
+  color: #878683;
+  height: 82px;
+  width: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.card-null {
+  height: 82px;
+  width: 50px; }
+
+.card:hover {
+  background-color: black;
+  color: white;
+  outline: 2px solid red; }
+
+#chat-container {
+  position: fixed;
+  bottom: 20px;
+  left: 8px; }
+
+#message-container {
+  height: 40vh;
+  width: 22vw;
+  background: black;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: white;
+  padding-right: 4px;
+  border-radius: 5px; }
+
+#message-container::-webkit-scrollbar {
+  height: 7px;
+  width: 5px; }
+
+#message-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+  background-color: #888888; }
+
+#messages p {
+  margin-left: 5px; }
+
+#username-overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  opacity: 1;
+  -webkit-transition: opacity 500ms linear;
+  transition: opacity 500ms linear; }
+
+#username-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; }
+
+#player-list-container {
+  background-color: #010101;
+  width: 15vw;
+  height: 40vh;
+  position: fixed;
+  top: 20px;
+  right: 8px;
+  color: white;
+  overflow: auto;
+  border-radius: 5px; }
+
+#player-list-header {
+  width: 100%;
+  text-align: center; }
+
+#player-list-header p {
+  border-bottom: 1px solid white; }
+
+#form {
+  width: 100%; }
+
+.circle-container li {
+  width: 0 !important;
+  height: 0 !important; }
+
+#card-description {
+  display: flex;
+  justify-content: row; }
+
+#card-description-text {
+  margin-left: 8px; }
+
+#card-modal-btn {
+  display: none; }
+
+.user-drew-card {
+  color: gold; }

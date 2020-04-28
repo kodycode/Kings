@@ -4,36 +4,39 @@
     <meta name="viewport" content="width=device-width" />
     <style>
       body { 
-        font-family: Tahoma, 
-        Geneva, sans-serif;
-        background-color: #444444;
+        font-family: Tahoma, Geneva, sans-serif;
+        margin: 0 !important;
       }
-      .card {
-        border: 1px solid #878683;
-        color: #878683;
-      }
-      #chat-container {
-        position: fixed;
-        bottom: 20px;
-      }
-      #message-container {
-        height: 400px;
-        width: 397px;
-        background-color: #ffd162;
-        overflow: auto;
-        color: black;
-      }
-      #messages p {
-        margin-left: 5px;
+      h1 {
+        text-align: center;
+        color: white;
       }
     </style>
+    <link rel="stylesheet" type="text/css" href="stylesheets/carbon-components.min.css">
     <link rel="stylesheet" type="text/css" href="gameroom.css">
+    <script src="js/carbon-components.min.js"></script>
     <!-- colyseus.js client -->
     <script type="text/javascript" src="https://raw.githack.com/colyseus/colyseus.js/master/dist/colyseus.js"></script>
   </head>
   <body>
+    <div id="username-overlay">
+      <form id="username-form" onkeydown="return event.key !== 'Enter';">
+          <div>
+            <input type="text" maxlength="12" placeholder="Enter Username" id="username-input" value="" size="20" autofocus autocomplete="off"/>
+            <input type="submit" id="username-input-btn" value="Send" />
+          </div>
+        </form>
+    </div>
+
+    <h1>King's Cup</h1>
+
+    <div id="player-list-container">
+      <span id="player-list-header"><p>Player List</p></span>
+      <ul class="bx--list--nested" id="player-list">
+      </ul>
+    </div>
+
     <ul class='circle-container'>
-        <li><div class="card">Card 1</div></li>
     </ul>
 
     <div id="chat-container">
@@ -41,28 +44,58 @@
         <div id="messages"></div>
       </div>
 
-      <form id="form">
-        <input type="text" id="input" value="" size="52" autofocus autocomplete="off"/>
-      </form>
+      <div class="bx--form-item bx--text-input-wrapper">
+        <div class="bx--text-input__field-wrapper">
+            <form id="form" onkeydown="return event.key !== 'Enter';">
+              <input autocomplete="off" id="input" type="text" class="bx--text-input" placeholder="Enter message...">
+            </form>
+        </div>
+      </div>
     </div>
 
+    <div data-modal id="card-modal" class="bx--modal " role="dialog"
+      aria-modal="true" aria-labelledby="card-modal-label" aria-describedby="modal-gbqytw2afas-heading" tabindex="-1">
+      <div class="bx--modal-container bx--modal-container--sm">
+        <div class="bx--modal-header">
+          <p class="bx--modal-header__heading bx--type-beta" id="card-modal-heading"></p>
+          <button class="bx--modal-close" type="button" data-modal-close aria-label="close modal" >
+            <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--modal-close__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4.7L11.3 4 8 7.3 4.7 4 4 4.7 7.3 8 4 11.3 4.7 12 8 8.7 11.3 12 12 11.3 8.7 8z"></path></svg>
+          </button>
+        </div>
+
+        <div class="bx--modal-content" >
+          <div id="card-description">
+            <img src="img/back.svg" width="250px" height="368px"></img>
+            <div id="card-description-text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <span tabindex="0"></span>
+      <button id="card-modal-btn" data-modal-target="#card-modal"></button>
+
     <script>
+      var roomInstance = undefined;
       var host = window.document.location.host.replace(/:.*/, '');
 
       var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':'+location.port : ''));
 
-      var circle_container = document.querySelector(".circle-container");
-      var cards = "";
-      var degrees = 0;
-      for (var i = 0; i < 52; i++) {
-        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);">Card ${i+1}</div></li>`;
+
+      function cardClicked(e) {
+        roomInstance.send("getCardResult", e.target.getAttribute("index"));
+      };
+
+      let circleContainer = document.querySelector(".circle-container");
+      let cards = "";
+      let degrees = 270;
+      for (let i = 0; i < 52; i++) {
+        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;  
         degrees += 6.92;
       }
-
-      circle_container.innerHTML = cards;
+      circleContainer.innerHTML = cards;
 
       client.joinOrCreate("kings").then(room => {
-        console.log("joined");
+        roomInstance = room;
         room.onStateChange.once(function(state) {
             console.log("initial room state:", state);
         });
@@ -74,29 +107,124 @@
 
         // listen to patches coming from the server
         room.onMessage("messages", function(message) {
-            var p = document.createElement("p");
+            let p = document.createElement("p");
             p.innerText = message;
+            p.style.wordWrap = "break-word";
             document.querySelector("#messages").appendChild(p);
-            var msg_container = document.querySelector("#message-container");
+            let msg_container = document.querySelector("#message-container");
             msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
         });
 
+        room.onMessage("userJoined", function(message) {
+          let p = document.createElement("p");
+          p.innerText = message;
+          p.setAttribute("class", "user-joined");
+          document.querySelector("#messages").appendChild(p);
+          var msg_container = document.querySelector("#message-container");
+          msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
+
+        room.onMessage("userLeft", function(message) {
+          let p = document.createElement("p");
+          p.innerText = message;
+          p.setAttribute("class", "user-left");
+          document.querySelector("#messages").appendChild(p);
+          let msg_container = document.querySelector("#message-container");
+          msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
+
+        room.onMessage("updatePlayerList", function(listOfPlayers) {
+          let playerList = document.querySelector("#player-list");
+          document.querySelector("#player-list").innerHTML = '';
+          for (var i = 0; i < listOfPlayers.length; i++) {
+            let li = document.createElement("li");
+            li.className = "bx--list__item";
+            li.innerText = listOfPlayers[i];
+            document.querySelector("#player-list").appendChild(li);
+          }
+        });
+
+        room.onMessage("updateCardsLeft", function(undefinedCards) {
+          let circleContainer = document.querySelector(".circle-container");
+          if (undefinedCards.length) {
+            let cardList = document.getElementsByClassName("card");
+            for (let i = 0; i < cardList.length; i++) {
+              let currentCard = cardList[i];
+              console.log(parseInt(currentCard.getAttribute("index")));
+              console.log(undefinedCards);
+              for (let j = 0; j < undefinedCards.length; j++) {
+                if (parseInt(currentCard.getAttribute("index")) === parseInt(undefinedCards[j])) {
+                  currentCard.setAttribute("class", "class-null");
+                }
+              }
+            }
+          }
+        });
+
+        room.onMessage("displayCardResult", function(card) {
+          let suit = card.suit.toLowerCase();
+          let value = card.value.toLowerCase();
+          if (!parseInt(value) && value != "ace") {
+            document.querySelector("#card-description img").setAttribute("src", `img/${value}_of_${suit}2.png`);
+          } else {
+            document.querySelector("#card-description img").setAttribute("src", `img/${value}_of_${suit}.png`);  
+          }
+          document.querySelector("#card-modal-btn").click();
+        });
+
+        room.onMessage("drawMessage", function(message) {
+          let p = document.createElement("p");
+          p.innerText = message;
+          p.setAttribute("class", "user-drew-card");
+          document.querySelector("#messages").appendChild(p);
+          let msg_container = document.querySelector("#message-container");
+          msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
+
+        document.querySelector("#username-input-btn").onclick = function(e) {
+          e.preventDefault();
+          let input = document.querySelector("#username-input");
+          if (input.value) {
+            // send data to room
+            room.send("name", input.value);
+
+            document.querySelector("#username-form").remove();
+
+            let usernameOverlay = document.getElementById("username-overlay");
+            usernameOverlay.style.opacity = '0';
+            setTimeout(function(){usernameOverlay.parentNode.removeChild(usernameOverlay);}, 500);
+          }
+        }
+
+        // send username to server on submit
+        document.querySelector("#username-form").onkeyup = function(e) {    
+          let input = document.querySelector("#username-input");
+          if (e.key === "Enter" && input.value) {
+            // send data to room
+            room.send("name", input.value);
+
+            document.querySelector("#username-form").remove();
+
+            let usernameOverlay = document.getElementById("username-overlay");
+            usernameOverlay.style.opacity = '0';
+            setTimeout(function(){usernameOverlay.parentNode.removeChild(usernameOverlay);}, 500);
+          }
+        }
+
         // send message to room on submit
-        document.querySelector("#form").onsubmit = function(e) {
-            e.preventDefault();
-
-            var input = document.querySelector("#input");
-
-            console.log("input:", input.value);
+        document.querySelector("#form").onkeyup = function(e) {
+          e.preventDefault();
+          let input = document.querySelector("#input");
+          if (e.key === "Enter" && input.value) {
 
             // send data to room
             room.send("message", input.value);
 
             // clear input
             input.value = "";
+          }
         }
       });
-
     </script>
   </body>
 </html>

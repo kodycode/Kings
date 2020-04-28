@@ -1,0 +1,43 @@
+body {
+    background-color: #444444 !important;
+}
+
+.bx--text-input {
+    background-color: #e4e4e4 !important;
+    border: none !important;
+    border-bottom: 1px solid rgb(141, 141, 141) !important;
+}
+
+.bx--text-input:focus {
+    outline: none !important;
+}
+
+.bx--list__item {
+    color: white !important;
+}
+
+.bx--list--nested > .bx--list__item::before {
+    position: absolute !important;
+    left: 1rem !important;
+    content: '\0025AA' !important;
+}
+
+.bx--modal-container {
+    background-color: rgb(76, 76, 76) !important;
+}
+
+.bx--modal-header__heading {
+    color: white !important;
+}
+
+.bx--modal-content > * {
+    color: white;
+}
+
+.bx--modal-close:hover {
+    background-color: rgb(124, 124, 124);
+}
+
+.bx--modal-close:focus {
+    border: 2px solid transparent !important;
+}

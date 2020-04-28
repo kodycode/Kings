@@ -1,3 +1,5 @@
+@import './_carbon_overrides.scss';
+
 /// Mixin to place items on a circle
 /// @author Hugo Giraudel
 /// @author Ana Tudor
@@ -8,7 +10,6 @@
   position: relative;
   width:  $circle-size;
   height: $circle-size;
-  padding: 0;
   border-radius: 50%; 
   list-style: none;       
   
@@ -39,7 +40,7 @@
 
 .circle-container {
   @include on-circle($item-count: 52, $circle-size: 40vw, $item-size: 6em); 
-  margin: 15vh auto 0;
+  margin: 11vh auto 0;
   
   img { 
     display: block; 
@@ -54,4 +55,136 @@
       filter: grayscale(0);
     }
   }
+}
+
+.user-joined {
+  color: green;
+}
+
+.user-left {
+  color: red;
+}
+
+.card {
+  border: 1px solid #878683;
+  background-image: url("img/back.svg");
+  background-size: contain;
+  color: #878683;
+  height: 82px;
+  width: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-null {
+  height: 82px;
+  width: 50px;
+}
+
+.card:hover {
+  background-color: black;
+  color: white;
+  outline: 2px solid red;
+}
+
+#chat-container {
+  position: fixed;
+  bottom: 20px;
+  left: 8px;
+}
+
+#message-container {
+  height: 40vh;
+  width: 22vw;
+  background: rgb(0,0,0);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: white;
+  padding-right: 4px;
+  border-radius: 5px;
+}
+
+#message-container::-webkit-scrollbar {
+	height:7px;
+  width: 5px;
+}
+
+#message-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0);
+  background-color: #888888;
+}
+
+#messages p {
+  margin-left: 5px;
+}
+
+#username-overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  opacity: 1;
+  -webkit-transition: opacity 500ms linear;
+  transition: opacity 500ms linear;
+}
+
+#username-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#player-list-container {
+  background-color: #010101;
+  width: 15vw;
+  height: 40vh;
+  position: fixed;
+  top: 20px;
+  right: 8px;
+  color: white;
+  overflow: auto;
+  border-radius: 5px;
+}
+
+#player-list-header {
+  width: 100%;
+  text-align: center;
+}
+
+#player-list-header p {
+  border-bottom: 1px solid white;
+}
+
+#form {
+  width: 100%;
+}
+
+.circle-container li {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+#card-description {
+  display: flex;
+  justify-content: row;
+}
+
+#card-description-text {
+  margin-left: 8px;
+}
+
+#card-modal-btn {
+  display: none;
+}
+
+.user-drew-card {
+  color: gold;
 }
