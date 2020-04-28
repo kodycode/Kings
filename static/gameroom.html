@@ -82,17 +82,20 @@
 
 
       function cardClicked(e) {
+        document.querySelector("#card-description img").setAttribute("src", "img/back.svg");
         roomInstance.send("getCardResult", e.target.getAttribute("index"));
       };
 
-      let circleContainer = document.querySelector(".circle-container");
-      let cards = "";
-      let degrees = 270;
-      for (let i = 0; i < 52; i++) {
-        cards += `<li><div class="card" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;  
-        degrees += 6.92;
+      const generateCards = function() {
+        let circleContainer = document.querySelector(".circle-container");
+        let cards = "";
+        let degrees = 270;
+        for (let i = 0; i < 52; i++) {
+          cards += `<li><div class="card" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;  
+          degrees += 6.92;
+        }
+        circleContainer.innerHTML = cards;
       }
-      circleContainer.innerHTML = cards;
 
       client.joinOrCreate("kings").then(room => {
         roomInstance = room;
@@ -150,8 +153,6 @@
             let cardList = document.getElementsByClassName("card");
             for (let i = 0; i < cardList.length; i++) {
               let currentCard = cardList[i];
-              console.log(parseInt(currentCard.getAttribute("index")));
-              console.log(undefinedCards);
               for (let j = 0; j < undefinedCards.length; j++) {
                 if (parseInt(currentCard.getAttribute("index")) === parseInt(undefinedCards[j])) {
                   currentCard.setAttribute("class", "class-null");
@@ -179,6 +180,19 @@
           document.querySelector("#messages").appendChild(p);
           let msg_container = document.querySelector("#message-container");
           msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
+
+        room.onMessage("getTurn", function(message) {
+          let p = document.createElement("p");
+          p.innerText = message;
+          p.setAttribute("class", "user-turn");
+          document.querySelector("#messages").appendChild(p);
+          let msg_container = document.querySelector("#message-container");
+          msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+        });
+
+        room.onMessage("generateCards", function(message) {
+          generateCards();
         });
 
         document.querySelector("#username-input-btn").onclick = function(e) {

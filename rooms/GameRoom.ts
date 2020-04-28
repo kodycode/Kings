@@ -3,7 +3,8 @@ import { Room } from "colyseus";
 export class GameRoom extends Room {
   playerList: any = {};
   currentCardsLeft: Array<any> = [];
-  undefinedIndexes: Array<Number> = [];
+  pickedCards: Array<Number> = [];
+  currentRound: Array<any> = [];
 
   onCreate (options: any) {
     console.log("Game room created!", options);
@@ -15,18 +16,38 @@ export class GameRoom extends Room {
     });
 
     this.onMessage("name", (client, message) => {
+      this.currentRound.push(client.sessionId);
       this.playerList[client.sessionId] = message;
       this.broadcast("userJoined", `${ message } joined.`);
       this.broadcast("updatePlayerList",  this.getPlayerNameList());
-      client.send("updateCardsLeft", this.undefinedIndexes);
+      client.send("updateCardsLeft", this.pickedCards);
+      client.send("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+      this.broadcast("generateCards", "");
     });
 
     this.onMessage("getCardResult", (client, message) => {
+      if (this.currentRound[0] !== client.sessionId) {
+        return;
+      }
+      let delElementIndex = this.currentRound.indexOf(client.sessionId);
+      if (this.currentRound.length && delElementIndex !== -1) {
+        this.currentRound.splice(delElementIndex, 1);
+      } 
+      if (this.pickedCards.length === this.currentCardsLeft.length) {
+        this.pickedCards = [];
+        this.currentCardsLeft = [];
+        this.populateCardList();
+        this.broadcast("generateCards", "");
+      }
       this.broadcast("displayCardResult", this.currentCardsLeft[parseInt(message)]);
       this.broadcast("drawMessage", `${this.playerList[client.sessionId]} drew a \
         ${this.currentCardsLeft[parseInt(message)].value} of ${this.currentCardsLeft[parseInt(message)].suit}`);
-      this.undefinedIndexes.push(parseInt(message));
-      this.broadcast("updateCardsLeft", this.undefinedIndexes);
+      this.pickedCards.push(parseInt(message));
+      this.broadcast("updateCardsLeft", this.pickedCards);
+      if (!this.currentRound.length) {
+        this.currentRound = Object.keys(this.playerList); 
+      }
+      this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
     });
   }
 
@@ -35,10 +56,22 @@ export class GameRoom extends Room {
   }
 
   onLeave(client: any) {
-      if (this.playerList[client.sessionId])
-        this.broadcast("userLeft", `${ this.playerList[client.sessionId] } left.`);
-      delete this.playerList[client.sessionId];
-      this.broadcast("updatePlayerList", this.getPlayerNameList());
+    let delElementIndex = this.currentRound.indexOf(client.sessionId);
+    if (this.playerList[client.sessionId])
+      this.broadcast("userLeft", `${ this.playerList[client.sessionId] } left.`);
+    if (this.currentRound[0] === client.sessionId) {
+      if (this.currentRound.length > 1) {
+        this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[1]]}'s turn!`);
+      }
+    }
+    if (this.currentRound.length && delElementIndex !== -1) {
+      this.currentRound.splice(delElementIndex, 1);
+      if (!this.currentRound.length) {
+        this.currentRound = Object.keys(this.playerList); 
+      }
+    }
+    delete this.playerList[client.sessionId];
+    this.broadcast("updatePlayerList", this.getPlayerNameList());
   }
 
   onDispose () {
@@ -63,7 +96,7 @@ export class GameRoom extends Room {
     }
   }
 
-  getPlayerNameList () {
+  getPlayerNameList() {
     let playerNameList = [];
     for (let id in this.playerList) {
       playerNameList.push(this.playerList[id]);
