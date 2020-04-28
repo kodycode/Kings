@@ -22,7 +22,6 @@ export class GameRoom extends Room {
       this.broadcast("updatePlayerList",  this.getPlayerNameList());
       client.send("updateCardsLeft", this.pickedCards);
       client.send("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
-      this.broadcast("generateCards", "");
     });
 
     this.onMessage("getCardResult", (client, message) => {
@@ -52,6 +51,7 @@ export class GameRoom extends Room {
   }
 
   onJoin(client: any) {
+    client.send("generateCards", "");
   }
 
   onLeave(client: any) {
