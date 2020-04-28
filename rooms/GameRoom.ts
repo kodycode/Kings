@@ -16,8 +16,8 @@ export class GameRoom extends Room {
     });
 
     this.onMessage("name", (client, message) => {
-      this.currentRound.push(client.sessionId);
       this.playerList[client.sessionId] = message;
+      this.currentRound.push(client.sessionId);
       this.broadcast("userJoined", `${ message } joined.`);
       this.broadcast("updatePlayerList",  this.getPlayerNameList());
       client.send("updateCardsLeft", this.pickedCards);
@@ -52,7 +52,6 @@ export class GameRoom extends Room {
   }
 
   onJoin(client: any) {
-    this.playerList[client.sessionId] = '';
   }
 
   onLeave(client: any) {
@@ -64,13 +63,14 @@ export class GameRoom extends Room {
         this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[1]]}'s turn!`);
       }
     }
+    delete this.playerList[client.sessionId];
     if (this.currentRound.length && delElementIndex !== -1) {
       this.currentRound.splice(delElementIndex, 1);
       if (!this.currentRound.length) {
         this.currentRound = Object.keys(this.playerList); 
+        this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
       }
     }
-    delete this.playerList[client.sessionId];
     this.broadcast("updatePlayerList", this.getPlayerNameList());
   }
 
