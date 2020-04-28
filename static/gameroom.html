@@ -36,8 +36,10 @@
       </ul>
     </div>
 
-    <ul class='circle-container'>
-    </ul>
+    <div id="circle-container">
+      <ul id="circle-list">
+      </ul>
+    </div>
 
     <div id="chat-container">
       <div id="message-container">
@@ -87,7 +89,7 @@
       };
 
       const generateCards = function() {
-        let circleContainer = document.querySelector(".circle-container");
+        let circleContainer = document.querySelector("#circle-list");
         let cards = "";
         let degrees = 270;
         for (let i = 0; i < 52; i++) {
@@ -148,7 +150,7 @@
         });
 
         room.onMessage("updateCardsLeft", function(undefinedCards) {
-          let circleContainer = document.querySelector(".circle-container");
+          let circleContainer = document.querySelector("#circle-list");
           if (undefinedCards.length) {
             let cardList = document.getElementsByClassName("card");
             for (let i = 0; i < cardList.length; i++) {
@@ -196,6 +198,21 @@
         });
 
         document.querySelector("#username-input-btn").onclick = function(e) {
+          e.preventDefault();
+          let input = document.querySelector("#username-input");
+          if (input.value) {
+            // send data to room
+            room.send("name", input.value);
+
+            document.querySelector("#username-form").remove();
+
+            let usernameOverlay = document.getElementById("username-overlay");
+            usernameOverlay.style.opacity = '0';
+            setTimeout(function(){usernameOverlay.parentNode.removeChild(usernameOverlay);}, 500);
+          }
+        }
+
+        document.querySelector("#username-input-btn").ontouchstart = function(e) {
           e.preventDefault();
           let input = document.querySelector("#username-input");
           if (input.value) {

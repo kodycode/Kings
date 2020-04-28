@@ -10,8 +10,7 @@
   position: relative;
   width:  $circle-size;
   height: $circle-size;
-  border-radius: 50%; 
-  list-style: none;       
+  margin-left: 2vw;
   
   > * {
     display: block;
@@ -38,9 +37,8 @@
   }
 }
 
-.circle-container {
+#circle-list {
   @include on-circle($item-count: 52, $circle-size: 40vw, $item-size: 6em); 
-  margin: 11vh auto 0;
   
   img { 
     display: block; 
@@ -55,6 +53,12 @@
       filter: grayscale(0);
     }
   }
+}
+
+#circle-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10vh;
 }
 
 .user-joined {
@@ -168,7 +172,7 @@
   width: 100%;
 }
 
-.circle-container li {
+#circle-list li {
   width: 0 !important;
   height: 0 !important;
 }
