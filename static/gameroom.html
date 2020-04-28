@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width" />
     <style>
       body { 
-        font-family: Tahoma, Geneva, sans-serif;
+        font-family: Tahoma, Geneva, sans-serif !important;
         margin: 0 !important;
       }
       h1 {
@@ -67,7 +67,7 @@
 
         <div class="bx--modal-content" >
           <div id="card-description">
-            <img src="img/back.svg" width="250px" height="368px"></img>
+            <img src="" width="250px" height="368px"></img>
             <div id="card-description-text">
             </div>
           </div>
@@ -84,7 +84,7 @@
 
 
       function cardClicked(e) {
-        document.querySelector("#card-description img").setAttribute("src", "img/back.svg");
+        document.querySelector("#card-description img").setAttribute("src", "");
         roomInstance.send("getCardResult", e.target.getAttribute("index"));
       };
 
