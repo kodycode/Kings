@@ -113,7 +113,24 @@ export class GameRoom extends Room {
     let previousCard = -1;
     this.pickedCards.sort();
     for (let card = 0; card < this.pickedCards.length; card++) {
-      if (previousCard+1 === this.pickedCards[card]) {
+      if (this.pickedCards[0] === 0 && this.pickedCards[card] === 51) {
+        if (previousCard+1 < this.pickedCards[card])
+          consecutiveCards = 1;
+        else
+          consecutiveCards++;
+        let i = 0;
+        let tempPreviousCard = -1;
+        while (this.pickedCards[i] === tempPreviousCard+1) {
+          consecutiveCards++;
+          tempPreviousCard = this.pickedCards[i];
+          i++;
+          if (consecutiveCards >= 6) {
+            this.broadcast("circleBroken", `${playerName} has broke the circle!`);
+            this.circleBroken = true;
+            break;
+          }
+        }
+      } else if (previousCard+1 === this.pickedCards[card]) {
         consecutiveCards++;
         if (consecutiveCards >= 6) {
           this.broadcast("circleBroken", `${playerName} has broke the circle!`);

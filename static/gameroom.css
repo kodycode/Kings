@@ -42,9 +42,9 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8em;
-    height: 8em;
-    margin: -4em; }
+    width: 5em;
+    height: 5em;
+    margin: -2.5em; }
     #circle-list > *:nth-of-type(1) {
       transform: rotate(0deg) translate(192px) rotate(0deg); }
     #circle-list > *:nth-of-type(2) {
