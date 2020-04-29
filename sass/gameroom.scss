@@ -38,7 +38,7 @@
 }
 
 #circle-list {
-  @include on-circle($item-count: 52, $circle-size: 384px, $item-size: 8em); 
+  @include on-circle($item-count: 52, $circle-size: 384px, $item-size: 5em); 
   
   img { 
     display: block; 
