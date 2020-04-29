@@ -10,7 +10,7 @@
   position: relative;
   width:  $circle-size;
   height: $circle-size;
-  margin-left: 2vw;
+  margin-top: 15vh;
   
   > * {
     display: block;
@@ -38,7 +38,7 @@
 }
 
 #circle-list {
-  @include on-circle($item-count: 52, $circle-size: 40vw, $item-size: 6em); 
+  @include on-circle($item-count: 52, $circle-size: 20vw, $item-size: 8em); 
   
   img { 
     display: block; 
@@ -58,7 +58,8 @@
 #circle-container {
   display: flex;
   justify-content: center;
-  margin-top: 10vh;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .user-joined {
@@ -74,8 +75,8 @@
   background-image: url("img/back.svg");
   background-size: contain;
   color: #878683;
-  height: 82px;
-  width: 50px;
+  height: 164px;
+  width: 100px;
   text-align: center;
   display: flex;
   justify-content: center;
