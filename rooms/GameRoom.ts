@@ -3,8 +3,9 @@ import { Room } from "colyseus";
 export class GameRoom extends Room {
   playerList: any = {};
   currentCardsLeft: Array<any> = [];
-  pickedCards: Array<Number> = [];
+  pickedCards: Array<number> = [];
   currentRound: Array<any> = [];
+  circleBroken: Boolean = false;
 
   onCreate (options: any) {
     console.log("Game room created!", options);
@@ -43,6 +44,9 @@ export class GameRoom extends Room {
         ${this.currentCardsLeft[parseInt(message)].value} of ${this.currentCardsLeft[parseInt(message)].suit}`);
       this.pickedCards.push(parseInt(message));
       this.broadcast("updateCardsLeft", this.pickedCards);
+      if (!this.circleBroken) {
+        this.checkCircle(this.playerList[client.sessionId]);
+      }
       if (!this.currentRound.length) {
         this.currentRound = Object.keys(this.playerList); 
       }
@@ -102,5 +106,24 @@ export class GameRoom extends Room {
       playerNameList.push(this.playerList[id]);
     }
     return playerNameList;
+  }
+
+  checkCircle(playerName: string) {
+    let consecutiveCards = 1;
+    let previousCard = -1;
+    this.pickedCards.sort();
+    for (let card = 0; card < this.pickedCards.length; card++) {
+      if (previousCard+1 === this.pickedCards[card]) {
+        consecutiveCards++;
+        if (consecutiveCards >= 6) {
+          this.broadcast("circleBroken", `${playerName} has broke the circle!`);
+          this.circleBroken = true;
+          break;
+        }
+      } else {
+        consecutiveCards = 1;
+      }
+      previousCard = this.pickedCards[card];
+    }
   }
 }

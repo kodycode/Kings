@@ -58,6 +58,15 @@ client.joinOrCreate("kings").then(room => {
     msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
   });
 
+  room.onMessage("circleBroken", function(message) {
+    let p = document.createElement("p");
+    p.innerText = message;
+    p.setAttribute("class", "user-broke-circle");
+    document.querySelector("#messages").appendChild(p);
+    var msg_container = document.querySelector("#message-container");
+    msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+  });
+
   room.onMessage("updatePlayerList", function(listOfPlayers) {
     let playerList = document.querySelector("#player-list");
     document.querySelector("#player-list").innerHTML = '';
