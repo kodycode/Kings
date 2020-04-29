@@ -38,7 +38,7 @@
 }
 
 #circle-list {
-  @include on-circle($item-count: 52, $circle-size: 20vw, $item-size: 8em); 
+  @include on-circle($item-count: 52, $circle-size: 384px, $item-size: 8em); 
   
   img { 
     display: block; 
@@ -75,7 +75,7 @@
   background-image: url("img/back.svg");
   background-size: contain;
   color: #878683;
-  height: 164px;
+  height: 144px;
   width: 100px;
   text-align: center;
   display: flex;
