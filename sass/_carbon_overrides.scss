@@ -16,10 +16,19 @@ body {
     color: white !important;
 }
 
+.bx--list--nested {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+}
+
 .bx--list--nested > .bx--list__item::before {
     position: absolute !important;
     left: 1rem !important;
     content: '\0025AA' !important;
+}
+
+.bx--list--nested > li {
+    margin-left: 2rem;
 }
 
 .bx--modal-container {

@@ -3,11 +3,6 @@ var host = window.document.location.host.replace(/:.*/, '');
 
 var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':' + location.port : ''));
 
-function cardClicked(e) {
-  document.querySelector("#card-description img").setAttribute("src", "");
-  roomInstance.send("getCardResult", e.target.getAttribute("index"));
-};
-
 const generateCards = function() {
   let circleContainer = document.querySelector("#circle-list");
   let cards = "";
@@ -17,6 +12,29 @@ const generateCards = function() {
     degrees += 6.92;
   }
   circleContainer.innerHTML = cards;
+}
+
+function cardClicked(e) {
+  document.querySelector("#card-description img").setAttribute("src", "");
+  roomInstance.send("getCardResult", e.target.getAttribute("index"));
+};
+
+function hideWindow(windowType) {
+  if (windowType === "chat") {
+    if (document.querySelector("#message-container").style.display === "none") {
+      document.querySelector("#message-container").style.display = "block";
+      document.querySelector(".bx--text-input-wrapper").style.display = "block";
+    } else {
+      document.querySelector("#message-container").style.display = "none";
+      document.querySelector(".bx--text-input-wrapper").style.display = "none";
+    }
+  } else {
+    if (document.querySelector("#player-list").style.display === "none") {
+      document.querySelector("#player-list").style.display = "block";
+    } else {
+      document.querySelector("#player-list").style.display = "none";
+    }
+  }
 }
 
 client.joinOrCreate("kings").then(room => {
