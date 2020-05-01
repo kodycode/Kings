@@ -128,14 +128,17 @@ client.joinOrCreate("kings").then(room => {
     }
   });
 
-  room.onMessage("displayCardResult", function(card) {
-    let suit = card.suit.toLowerCase();
-    let value = card.value.toLowerCase();
-    if (!parseInt(value) && value != "ace") {
+  room.onMessage("displayCardResult", function(cardDrawn) {
+    let suit = cardDrawn.card.suit;
+    let value = cardDrawn.card.value;
+    if (!parseInt(value) && value != "Ace") {
       document.querySelector("#card-description img").setAttribute("src", `img/${value}_of_${suit}2.png`);
     } else {
       document.querySelector("#card-description img").setAttribute("src", `img/${value}_of_${suit}.png`);
     }
+    document.querySelector("#card-description-text").innerHTML = `<span><p style="color: #A851A9">\
+      ${cardDrawn.playerName}</p><p> pulled a ${value} of ${suit}!</p>\
+    </span>`;
     document.querySelector("#card-modal-btn").click();
   });
 

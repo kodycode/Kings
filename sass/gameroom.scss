@@ -166,6 +166,20 @@
   margin-left: 5px;
 }
 
+#cardDrawn {
+  position: fixed;
+  min-height: -webkit-fill-available;
+  min-width: -webkit-fill-available;
+  top: 0;
+  background-color: red;
+}
+
+#test {
+  
+  width: 384px;
+  height: 200px;
+}
+
 #username-overlay {
   position: fixed;
   width: 100vw;
@@ -248,7 +262,11 @@
 
 #card-description {
   display: flex;
-  justify-content: row;
+}
+
+#card-image {
+  width: 250px;
+  height: 368px;
 }
 
 #card-description-text {

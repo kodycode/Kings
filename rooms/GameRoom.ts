@@ -39,9 +39,10 @@ export class GameRoom extends Room {
         this.populateCardList();
         this.broadcast("generateCards", "");
       }
-      this.broadcast("displayCardResult", this.currentCardsLeft[parseInt(message)]);
+      let cardDrawn = this.currentCardsLeft[parseInt(message)];
+      this.broadcast("displayCardResult", {card: cardDrawn, playerName: this.playerList[client.sessionId]});
       this.broadcast("drawMessage", `${this.playerList[client.sessionId]} drew a \
-        ${this.currentCardsLeft[parseInt(message)].value} of ${this.currentCardsLeft[parseInt(message)].suit}`);
+        ${cardDrawn.value} of ${cardDrawn.suit}`);
       this.pickedCards.push(parseInt(message));
       this.broadcast("updateCardsLeft", this.pickedCards);
       if (!this.circleBroken) {

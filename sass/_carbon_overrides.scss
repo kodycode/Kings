@@ -27,7 +27,6 @@ body {
 }
 
 .bx--modal-container {
-    width: 325px !important;
     background-color: rgb(76, 76, 76) !important;
 }
 
@@ -47,10 +46,19 @@ body {
     border: 2px solid transparent !important;
 }
 
+.bx--modal-content {
+    margin-bottom: 2rem !important;
+}
+
 ul {
     list-style: disc outside none !important;
 }
 
 .bx--list--nested > li {
     margin-left: 2rem;
+}
+
+#card-description-text p {
+    font-size: 2rem !important;
+    line-height: 3rem !important;
 }
