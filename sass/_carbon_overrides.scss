@@ -21,17 +21,13 @@ body {
     margin-left: 0 !important;
 }
 
-.bx--list--nested > .bx--list__item::before {
-    position: absolute !important;
-    content: '\0025AA' !important;
-}
-
 .bx--list--nested > li {
     margin-top: 5px;
     margin-left: 1rem;
 }
 
 .bx--modal-container {
+    width: 325px !important;
     background-color: rgb(76, 76, 76) !important;
 }
 
@@ -49,4 +45,12 @@ body {
 
 .bx--modal-close:focus {
     border: 2px solid transparent !important;
+}
+
+ul {
+    list-style: disc outside none !important;
+}
+
+.bx--list--nested > li {
+    margin-left: 2rem;
 }

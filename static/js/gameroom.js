@@ -3,6 +3,20 @@ var host = window.document.location.host.replace(/:.*/, '');
 
 var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':' + location.port : ''));
 
+const resetChatGrowingWrapper = function (windowType) {
+  let chatGrowDiv = document.getElementById('chat-growing-wrapper');
+  let messageContainer = document.querySelector('#message-container');
+  let chatInput = document.querySelector(".bx--text-input");
+  chatGrowDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
+}
+
+const resetPlayerGrowingWrapper = function (windowType) {
+  let playerGrowDiv = document.getElementById('player-growing-wrapper');
+  let messageContainer = document.querySelector('#message-container');
+  let chatInput = document.querySelector(".bx--text-input");
+  playerGrowDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
+}
+
 const generateCards = function() {
   let circleContainer = document.querySelector("#circle-list");
   let cards = "";
@@ -21,21 +35,24 @@ function cardClicked(e) {
 
 function hideWindow(windowType) {
   if (windowType === "chat") {
-    if (document.querySelector("#message-container").style.display === "none") {
-      document.querySelector("#message-container").style.display = "block";
-      document.querySelector(".bx--text-input-wrapper").style.display = "block";
+    let chatGrowWrapper = document.getElementById('chat-growing-wrapper');
+    if (chatGrowWrapper.clientHeight) {
+      chatGrowWrapper.style.height = 0;
     } else {
-      document.querySelector("#message-container").style.display = "none";
-      document.querySelector(".bx--text-input-wrapper").style.display = "none";
+      resetChatGrowingWrapper();
     }
   } else {
-    if (document.querySelector("#player-list").style.display === "none") {
-      document.querySelector("#player-list").style.display = "block";
+    let playerGrowWrapper = document.getElementById('player-growing-wrapper');
+    if (playerGrowWrapper.clientHeight) {
+      playerGrowWrapper.style.height = 0;
     } else {
-      document.querySelector("#player-list").style.display = "none";
+      resetPlayerGrowingWrapper();
     }
   }
 }
+
+resetChatGrowingWrapper();
+resetPlayerGrowingWrapper();
 
 client.joinOrCreate("kings").then(room => {
   roomInstance = room;
@@ -157,7 +174,7 @@ client.joinOrCreate("kings").then(room => {
       usernameOverlay.style.opacity = '0';
       setTimeout(function() {
         usernameOverlay.parentNode.removeChild(usernameOverlay);
-      }, 500);
+      }, 1100);
     }
   }
 

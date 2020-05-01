@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+    <meta name="viewport" content="width=device-width; initial-scale:1.0;" />
     <style>
       body { 
         font-family: Tahoma, Geneva, sans-serif !important;
@@ -10,7 +10,6 @@
       h1 {
         text-align: center;
         color: white;
-        position: fixed;
         width: 100%;
         z-index: -1;
       }
@@ -22,7 +21,7 @@
     <script type="text/javascript" src="https://raw.githack.com/colyseus/colyseus.js/master/dist/colyseus.js"></script>
   </head>
   <body>
-    <h1>King's Cup</h1>
+    <h1>Kings</h1>
     <div id="username-overlay">
       <form id="username-form" onkeydown="return event.key !== 'Enter';">
         <div>
@@ -40,14 +39,16 @@
               <img src="img/minimize-window-24.png"/>
             </div>
           </div>
-          <div id="message-container">
-            <div id="messages"></div>
-          </div>
-          <div class="bx--form-item bx--text-input-wrapper">
-            <div class="bx--text-input__field-wrapper">
-              <form id="form" onkeydown="return event.key !== 'Enter';">
-                <input autocomplete="off" id="input" type="text" class="bx--text-input" placeholder="Enter message...">
-                </form>
+          <div id="chat-growing-wrapper">
+            <div id="message-container">
+              <div id="messages"></div>
+            </div>
+            <div class="bx--form-item bx--text-input-wrapper">
+              <div class="bx--text-input__field-wrapper">
+                <form id="form" onkeydown="return event.key !== 'Enter';">
+                  <input autocomplete="off" id="input" type="text" class="bx--text-input" placeholder="Enter message...">
+                  </form>
+              </div>
             </div>
           </div>
         </div>
@@ -66,8 +67,10 @@
                 <img src="img/minimize-window-24.png"/>
               </div>
             </div>
-            <ul class="bx--list--nested" id="player-list">
-            </ul>
+            <div id="player-growing-wrapper">
+              <ul class="bx--list--nested" id="player-list">
+              </ul>
+            </div>
         </div>
       </div>
 
