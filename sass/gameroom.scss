@@ -7,10 +7,8 @@
 /// @param {Length} $circle-size - Large circle size
 /// @param {Length} $item-size - Single item size
 @mixin on-circle($item-count, $circle-size, $item-size) {
-  position: relative;
   width:  $circle-size;
   height: $circle-size;
-  margin-top: 15vh;
   
   > * {
     display: block;
@@ -42,7 +40,7 @@
   
   img { 
     display: block; 
-    max-width: 100%; 
+    width: 100%; 
     border-radius: 50%;
     filter: grayscale(100%);
     border: solid 5px tomato;
@@ -55,9 +53,13 @@
   }
 }
 
-#circle-container {
+#container {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#circle-container {
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -99,20 +101,54 @@
 }
 
 #chat-container {
-  position: fixed;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+#chat-window {
   bottom: 20px;
   left: 8px;
+  border: 3px solid #7851A9;
+  border-left: 0px;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  width: 420px;
+  background-color: black;
+}
+
+#chat-header-bar {
+  color: white;
+  background-color: #7851A9;
+  height: 30px;
+  text-align: center;
+}
+
+#chat-header-bar p {
+  margin-left: 8px;
+}
+
+.minimize-window-btn {
+  right: 0;
+  float: right;
+}
+
+.minimize-window-btn:hover {
+  cursor: pointer;
 }
 
 #message-container {
-  height: 40vh;
-  width: 22vw;
-  background: rgb(0,0,0);
   overflow-y: scroll;
   overflow-x: hidden;
   color: white;
   padding-right: 4px;
-  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px;
 }
 
 #message-container::-webkit-scrollbar {
@@ -121,7 +157,6 @@
 }
 
 #message-container::-webkit-scrollbar-thumb {
-  border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0);
   box-shadow: inset 0 0 6px rgba(255,255,255,0);
   background-color: #888888;
@@ -136,7 +171,7 @@
   width: 100vw;
   height: 100vh;
   background-color: gray;
-  z-index: 1;
+  z-index: 99;
   display: flex;
   justify-content: center;
   top: 0;
@@ -153,24 +188,37 @@
 }
 
 #player-list-container {
-  background-color: #010101;
-  width: 15vw;
-  height: 40vh;
-  position: fixed;
+  z-index: 1;
+}
+
+#player-list-window {
   top: 20px;
   right: 8px;
   color: white;
   overflow: auto;
-  border-radius: 5px;
+  width: 245px;
+  border: 3px solid #7851A9;
+  border-right: 0px;
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: black;
 }
 
 #player-list-header {
-  width: 100%;
+  color: white;
+  background-color: #7851A9;
+  height: 30px;
   text-align: center;
 }
 
-#player-list-header p {
-  border-bottom: 1px solid white;
+#player-list {
+  height: 250px;
+}
+
+#player-list li p {
+  margin-left: 10px;
 }
 
 #form {

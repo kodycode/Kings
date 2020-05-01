@@ -23,12 +23,12 @@ body {
 
 .bx--list--nested > .bx--list__item::before {
     position: absolute !important;
-    left: 1rem !important;
     content: '\0025AA' !important;
 }
 
 .bx--list--nested > li {
-    margin-left: 2rem;
+    margin-top: 5px;
+    margin-left: 1rem;
 }
 
 .bx--modal-container {

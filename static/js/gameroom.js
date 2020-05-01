@@ -91,7 +91,7 @@ client.joinOrCreate("kings").then(room => {
     for (var i = 0; i < listOfPlayers.length; i++) {
       let li = document.createElement("li");
       li.className = "bx--list__item";
-      li.innerText = listOfPlayers[i];
+      li.innerHTML = `<p>${listOfPlayers[i]}</p>`;
       document.querySelector("#player-list").appendChild(li);
     }
   });

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
     <style>
       body { 
         font-family: Tahoma, Geneva, sans-serif !important;
@@ -10,6 +10,9 @@
       h1 {
         text-align: center;
         color: white;
+        position: fixed;
+        width: 100%;
+        z-index: -1;
       }
     </style>
     <link rel="stylesheet" type="text/css" href="stylesheets/carbon-components.min.css">
@@ -19,73 +22,76 @@
     <script type="text/javascript" src="https://raw.githack.com/colyseus/colyseus.js/master/dist/colyseus.js"></script>
   </head>
   <body>
+    <h1>King's Cup</h1>
     <div id="username-overlay">
       <form id="username-form" onkeydown="return event.key !== 'Enter';">
-          <div>
-            <input type="text" maxlength="12" placeholder="Enter Username" id="username-input" value="" size="20" autofocus autocomplete="off"/>
-            <input type="submit" id="username-input-btn" value="Send" />
+        <div>
+          <input type="text" maxlength="12" placeholder="Enter Username" id="username-input" value="" size="20" autofocus autocomplete="off"/>
+          <input type="submit" id="username-input-btn" value="Send" />
+        </div>
+      </form>
+    </div>
+    <div id="container">
+      <div id="chat-container">
+        <div id="chat-window">
+          <div id="chat-header-bar">
+            <p style="display: inline-block;">Chat</p>
+            <div class="minimize-window-btn" onclick="hideWindow('chat')">
+              <img src="img/minimize-window-24.png"/>
+            </div>
           </div>
-        </form>
-    </div>
-
-    <h1>King's Cup</h1>
-
-    <div id="player-list-container">
-      <div id="player-list-header">
-        <p>Player List</p>
-        <div class="minimize-window-btn" onclick="hideWindow('player')">
-          <img src="img/minimize-window-24.png"/>
-        </div>
-      </div>
-      <ul class="bx--list--nested" id="player-list">
-      </ul>
-    </div>
-
-    <div id="circle-container">
-      <ul id="circle-list">
-      </ul>
-    </div>
-
-    <div id="chat-container">
-      <div id="chat-header-bar">
-        <p>Chat Window</p>
-        <div class="minimize-window-btn" onclick="hideWindow('chat')">
-          <img src="img/minimize-window-24.png"/>
-        </div>
-      </div>
-      <div id="message-container">
-        <div id="messages"></div>
-      </div>
-
-      <div class="bx--form-item bx--text-input-wrapper">
-        <div class="bx--text-input__field-wrapper">
-            <form id="form" onkeydown="return event.key !== 'Enter';">
-              <input autocomplete="off" id="input" type="text" class="bx--text-input" placeholder="Enter message...">
-            </form>
-        </div>
-      </div>
-    </div>
-
-    <div data-modal id="card-modal" class="bx--modal " role="dialog"
-      aria-modal="true" aria-labelledby="card-modal-label" aria-describedby="modal-gbqytw2afas-heading" tabindex="-1">
-      <div class="bx--modal-container bx--modal-container--sm">
-        <div class="bx--modal-header">
-          <p class="bx--modal-header__heading bx--type-beta" id="card-modal-heading"></p>
-          <button class="bx--modal-close" type="button" data-modal-close aria-label="close modal" >
-            <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--modal-close__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4.7L11.3 4 8 7.3 4.7 4 4 4.7 7.3 8 4 11.3 4.7 12 8 8.7 11.3 12 12 11.3 8.7 8z"></path></svg>
-          </button>
-        </div>
-
-        <div class="bx--modal-content" >
-          <div id="card-description">
-            <img src="" width="250px" height="368px"></img>
-            <div id="card-description-text">
+          <div id="message-container">
+            <div id="messages"></div>
+          </div>
+          <div class="bx--form-item bx--text-input-wrapper">
+            <div class="bx--text-input__field-wrapper">
+              <form id="form" onkeydown="return event.key !== 'Enter';">
+                <input autocomplete="off" id="input" type="text" class="bx--text-input" placeholder="Enter message...">
+                </form>
             </div>
           </div>
         </div>
       </div>
-      <span tabindex="0"></span>
-      <button id="card-modal-btn" data-modal-target="#card-modal"></button>
+
+      <div id="circle-container">
+        <ul id="circle-list">
+        </ul>
+      </div>
+
+      <div id="player-list-container">
+        <div id="player-list-window">
+            <div id="player-list-header">
+              <p style="display: inline-block;">Player List</p>
+              <div class="minimize-window-btn" onclick="hideWindow('player')">
+                <img src="img/minimize-window-24.png"/>
+              </div>
+            </div>
+            <ul class="bx--list--nested" id="player-list">
+            </ul>
+        </div>
+      </div>
+
+      <div data-modal id="card-modal" class="bx--modal " role="dialog"
+        aria-modal="true" aria-labelledby="card-modal-label" aria-describedby="modal-gbqytw2afas-heading" tabindex="-1">
+        <div class="bx--modal-container bx--modal-container--sm">
+          <div class="bx--modal-header">
+            <p class="bx--modal-header__heading bx--type-beta" id="card-modal-heading"></p>
+            <button class="bx--modal-close" type="button" data-modal-close aria-label="close modal" >
+              <svg focusable="false" preserveAspectRatio="xMidYMid meet" style="will-change: transform;" xmlns="http://www.w3.org/2000/svg" class="bx--modal-close__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M12 4.7L11.3 4 8 7.3 4.7 4 4 4.7 7.3 8 4 11.3 4.7 12 8 8.7 11.3 12 12 11.3 8.7 8z"></path></svg>
+            </button>
+          </div>
+
+          <div class="bx--modal-content" >
+            <div id="card-description">
+              <img src="" width="250px" height="368px"></img>
+              <div id="card-description-text">
+              </div>
+            </div>
+          </div>
+        </div>
+        <span tabindex="0"></span>
+        <button id="card-modal-btn" data-modal-target="#card-modal"></button>
+    </div>
     <script src="js/gameroom.js"></script>
   </body>
 </html>
