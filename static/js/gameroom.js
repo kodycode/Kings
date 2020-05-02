@@ -51,8 +51,27 @@ function hideWindow(windowType) {
   }
 }
 
-resetChatGrowingWrapper();
-resetPlayerGrowingWrapper();
+function adjustWindowSizes() {
+  resetChatGrowingWrapper();
+  resetPlayerGrowingWrapper();
+}
+
+function resizeEvent() {
+  adjustWindowSizes();
+}
+
+adjustWindowSizes();
+
+outerHeight = window.outerHeight;
+outerWidth = window.outerWidth;
+
+var resizeTimer;
+window.onresize = function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    adjustWindowSizes()
+  }, 250);
+};
 
 client.joinOrCreate("kings").then(room => {
   roomInstance = room;
