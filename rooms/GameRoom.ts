@@ -2,7 +2,7 @@ import { Room } from "colyseus";
 
 export class GameRoom extends Room {
   playerList: any = {};
-  currentCardsLeft: Array<any> = [];
+  currentCards: Array<any> = [];
   pickedCards: Array<number> = [];
   currentRound: Array<any> = [];
   circleBroken: Boolean = false;
@@ -33,13 +33,13 @@ export class GameRoom extends Room {
       if (this.currentRound.length && delElementIndex !== -1) {
         this.currentRound.splice(delElementIndex, 1);
       } 
-      if (this.pickedCards.length === this.currentCardsLeft.length) {
+      if (this.pickedCards.length === this.currentCards.length) {
         this.pickedCards = [];
-        this.currentCardsLeft = [];
+        this.currentCards = [];
         this.populateCardList();
         this.broadcast("generateCards", "");
       }
-      let cardDrawn = this.currentCardsLeft[parseInt(message)];
+      let cardDrawn = this.currentCards[parseInt(message)];
       this.broadcast("displayCardResult", {card: cardDrawn, playerName: this.playerList[client.sessionId]});
       this.broadcast("drawMessage", `${this.playerList[client.sessionId]} drew a \
         ${cardDrawn.value} of ${cardDrawn.suit}`);
@@ -89,15 +89,15 @@ export class GameRoom extends Room {
 
     for (let suit in suits) {
       for (let value in values) {
-        this.currentCardsLeft.push({"suit": `${suits[suit]}`, "value": `${values[value]}`});
+        this.currentCards.push({"suit": `${suits[suit]}`, "value": `${values[value]}`});
       }
     }
 
-    for (let i = this.currentCardsLeft.length-1; i > 0; i--) {
+    for (let i = this.currentCards.length-1; i > 0; i--) {
       const j = Math.floor(Math.random() * i);
-      const temp = this.currentCardsLeft[i];
-      this.currentCardsLeft[i] = this.currentCardsLeft[j];
-      this.currentCardsLeft[j] = temp;
+      const temp = this.currentCards[i];
+      this.currentCards[i] = this.currentCards[j];
+      this.currentCards[j] = temp;
     }
   }
 
