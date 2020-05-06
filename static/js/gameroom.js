@@ -17,12 +17,15 @@ const resetPlayerGrowingWrapper = function (windowType) {
   playerGrowDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
 }
 
-const generateCards = function() {
+const generateCards = function(pickedCards) {
   let circleContainer = document.querySelector("#circle-list");
   let cards = "";
   let degrees = 270;
   for (let i = 0; i < 52; i++) {
-    cards += `<li><div class="card" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;
+    if (pickedCards.indexOf(i) === -1)
+      cards += `<li><div class="card" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;
+    else
+    cards += `<li><div class="card-null" style="transform: rotate(${degrees}deg);" onclick="cardClicked(event)" index="${i}"></div></li>`;
     degrees += 6.92;
   }
   circleContainer.innerHTML = cards;
@@ -179,8 +182,8 @@ client.joinOrCreate("kings").then(room => {
     msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
   });
 
-  room.onMessage("generateCards", function(message) {
-    generateCards();
+  room.onMessage("generateCards", function(pickedCards) {
+    generateCards(pickedCards);
   });
 
   document.querySelector("#username-input-btn").onclick = function(e) {
