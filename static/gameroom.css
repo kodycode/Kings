@@ -12,13 +12,17 @@ body {
 .bx--list__item {
   color: white !important; }
 
-.bx--list--nested > .bx--list__item::before {
-  position: absolute !important;
-  left: 1rem !important;
-  content: '\0025AA' !important; }
+.bx--list--nested {
+  margin-top: 0 !important;
+  margin-left: 0 !important; }
+
+.bx--list--nested > li {
+  margin-top: 5px;
+  margin-left: 1rem; }
 
 .bx--modal-container {
-  background-color: #4c4c4c !important; }
+  background-color: #4c4c4c !important;
+  width: 30% !important; }
 
 .bx--modal-header__heading {
   color: white !important; }
@@ -32,11 +36,42 @@ body {
 .bx--modal-close:focus {
   border: 2px solid transparent !important; }
 
+.bx--modal-content {
+  margin-bottom: 2rem !important; }
+
+ul {
+  list-style: disc outside none !important; }
+
+.bx--list--nested {
+  overflow: auto; }
+
+.bx--list--nested::-webkit-scrollbar {
+  height: 7px;
+  width: 10px; }
+
+.bx--list--nested::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px #646464;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+  background-color: #888888; }
+
+.bx--list--nested::-webkit-scrollbar-thumb:hover {
+  background-color: white; }
+
+.bx--list--nested::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px #646464;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+  background-color: #888888; }
+
+.bx--list--nested > li {
+  margin-left: 2rem; }
+
+#card-description-text p {
+  font-size: 2rem !important;
+  line-height: 3rem !important; }
+
 #circle-list {
-  position: relative;
   width: 384px;
-  height: 384px;
-  margin-top: 15vh; }
+  height: 384px; }
   #circle-list > * {
     display: block;
     position: absolute;
@@ -151,7 +186,7 @@ body {
       transform: rotate(353.07692deg) translate(192px) rotate(-353.07692deg); }
   #circle-list img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     border-radius: 50%;
     filter: grayscale(100%);
     border: solid 5px tomato;
@@ -159,11 +194,11 @@ body {
     #circle-list img:hover, #circle-list img:active {
       filter: grayscale(0); }
 
-#circle-container {
+#container {
   display: flex;
-  justify-content: center;
-  margin-top: auto;
-  margin-bottom: auto; }
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: -50px; }
 
 .user-joined {
   color: green; }
@@ -196,71 +231,144 @@ body {
   outline: 2px solid red; }
 
 #chat-container {
-  position: fixed;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  z-index: 1; }
+
+#chat-window {
   bottom: 20px;
-  left: 8px; }
+  left: 8px;
+  border: 3px solid #7851A9;
+  border-left: 0px;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  width: 420px;
+  background-color: black; }
+
+#chat-header-bar {
+  color: white;
+  background-color: #7851A9;
+  height: 30px;
+  text-align: center; }
+
+#chat-header-bar p {
+  margin-left: 16px; }
+
+.minimize-window-btn {
+  right: 0;
+  float: right; }
+
+.minimize-window-btn:hover {
+  cursor: pointer; }
 
 #message-container {
-  height: 40vh;
-  width: 22vw;
-  background: black;
   overflow-y: scroll;
   overflow-x: hidden;
   color: white;
   padding-right: 4px;
-  border-radius: 5px; }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 30vh; }
 
 #message-container::-webkit-scrollbar {
   height: 7px;
-  width: 5px; }
+  width: 10px; }
 
 #message-container::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
+  -webkit-box-shadow: inset 0 0 6px #646464;
   box-shadow: inset 0 0 6px rgba(255, 255, 255, 0);
   background-color: #888888; }
 
+#message-container::-webkit-scrollbar-thumb:hover {
+  background-color: white; }
+
 #messages p {
   margin-left: 5px; }
+
+#cardDrawn {
+  position: fixed;
+  min-height: -webkit-fill-available;
+  min-width: -webkit-fill-available;
+  top: 0;
+  background-color: red; }
+
+#test {
+  width: 384px;
+  height: 200px; }
 
 #username-overlay {
   position: fixed;
   width: 100vw;
   height: 100vh;
+  min-height: -webkit-fill-available;
+  min-width: -webkit-fill-available;
   background-color: gray;
-  z-index: 1;
+  z-index: 99;
   display: flex;
   justify-content: center;
   top: 0;
   opacity: 1;
-  -webkit-transition: opacity 500ms linear;
-  transition: opacity 500ms linear; }
+  -webkit-transition: opacity 1s linear;
+  transition: opacity 1s linear; }
 
 #username-form {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column; }
+  margin: auto; }
 
-#player-list-container {
-  background-color: #010101;
-  width: 15vw;
-  height: 40vh;
-  position: fixed;
-  top: 20px;
-  right: 8px;
+#username-form div input,
+#username-input-btn {
+  display: inline-block;
+  padding: 8px;
+  font-size: 3vh;
+  outline: 0;
+  -webkit-appearance: none; }
+
+#username-input-btn {
+  background-color: #393939;
+  border: 2px solid #393939;
+  color: white;
+  width: 14vh; }
+
+#username-input-btn:hover {
+  transition: background-color 0.5s;
+  background-color: #646464;
+  border: 2px solid #646464; }
+
+#list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1; }
+
+#card-counter-window,
+#player-list-window {
   color: white;
   overflow: auto;
-  border-radius: 5px; }
+  width: 245px;
+  border: 3px solid #7851A9;
+  border-right: 0px;
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: black; }
 
+#card-counter-header,
 #player-list-header {
-  width: 100%;
+  color: white;
+  background-color: #7851A9;
+  height: 30px;
   text-align: center; }
 
-#player-list-header p {
-  border-bottom: 1px solid white; }
+#card-list,
+#player-list {
+  height: 30vh; }
 
 #form {
+  border-top: 3px solid #7851A9;
   width: 100%; }
 
 #circle-list li {
@@ -268,8 +376,11 @@ body {
   height: 0 !important; }
 
 #card-description {
-  display: flex;
-  justify-content: row; }
+  display: flex; }
+
+#card-image {
+  width: 250px;
+  height: 368px; }
 
 #card-description-text {
   margin-left: 8px; }
@@ -282,3 +393,13 @@ body {
 
 .user-turn {
   color: lightskyblue; }
+
+#card-growing-wrapper,
+#player-growing-wrapper,
+#chat-growing-wrapper {
+  -moz-transition: height .5s;
+  -ms-transition: height .5s;
+  -o-transition: height .5s;
+  -webkit-transition: height .5s;
+  transition: height .5s;
+  overflow: hidden; }

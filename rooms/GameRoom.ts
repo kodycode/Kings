@@ -1,7 +1,9 @@
 import { Room } from "colyseus";
+import { Dictionary } from "express-serve-static-core";
 
 export class GameRoom extends Room {
   playerList: any = {};
+  cardCount: any = {};
   currentCards: Array<any> = [];
   pickedCards: Array<number> = [];
   currentRound: Array<any> = [];
@@ -22,6 +24,7 @@ export class GameRoom extends Room {
       this.broadcast("userJoined", `${ message } joined.`);
       this.broadcast("updatePlayerList",  this.getPlayerNameList());
       client.send("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+      client.send("getCardCount", this.cardCount);
     });
 
     this.onMessage("getCardResult", (client, message) => {
@@ -39,18 +42,20 @@ export class GameRoom extends Room {
         this.broadcast("generateCards", this.pickedCards);
       }
       let cardDrawn = this.currentCards[parseInt(message)];
-      this.broadcast("displayCardResult", {card: cardDrawn, playerName: this.playerList[client.sessionId]});
-      this.broadcast("drawMessage", `${this.playerList[client.sessionId]} drew a \
-        ${cardDrawn.value} of ${cardDrawn.suit}`);
       this.pickedCards.push(parseInt(message));
-      this.broadcast("updateCardsLeft", this.pickedCards);
       if (!this.circleBroken) {
         this.checkCircle(this.playerList[client.sessionId]);
       }
       if (!this.currentRound.length) {
         this.currentRound = Object.keys(this.playerList); 
       }
+      --this.cardCount[cardDrawn.value];
+      this.broadcast("displayCardResult", {card: cardDrawn, playerName: this.playerList[client.sessionId]});
+      this.broadcast("drawMessage", `${this.playerList[client.sessionId]} drew a \
+        ${cardDrawn.value} of ${cardDrawn.suit}`);
+      this.broadcast("updateCardsLeft", this.pickedCards);
       this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+      this.broadcast("getCardCount", this.cardCount);
     });
   }
 
@@ -86,17 +91,24 @@ export class GameRoom extends Room {
     const suits = ['Hearts', 'Spades', 'Clubs', 'Diamonds'];
     const values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'];
 
+    // create deck of cards
     for (let suit in suits) {
       for (let value in values) {
         this.currentCards.push({"suit": `${suits[suit]}`, "value": `${values[value]}`});
       }
     }
 
+    // randomize deck of cards
     for (let i = this.currentCards.length-1; i > 0; i--) {
       const j = Math.floor(Math.random() * i);
       const temp = this.currentCards[i];
       this.currentCards[i] = this.currentCards[j];
       this.currentCards[j] = temp;
+    }
+
+    // create card counter
+    for (let i = 0; i < values.length; i++) {
+      this.cardCount[values[i]] = 4;
     }
   }
 

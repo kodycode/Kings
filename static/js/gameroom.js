@@ -3,18 +3,16 @@ var host = window.document.location.host.replace(/:.*/, '');
 
 var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':' + location.port : ''));
 
-const resetChatGrowingWrapper = function (windowType) {
-  let chatGrowDiv = document.getElementById('chat-growing-wrapper');
-  let messageContainer = document.querySelector('#message-container');
-  let chatInput = document.querySelector(".bx--text-input");
-  chatGrowDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
-}
-
-const resetPlayerGrowingWrapper = function (windowType) {
-  let playerGrowDiv = document.getElementById('player-growing-wrapper');
-  let messageContainer = document.querySelector('#message-container');
-  let chatInput = document.querySelector(".bx--text-input");
-  playerGrowDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
+const resetGrowingWrapper = function (windowType) {
+  let growDiv = document.getElementById(`${windowType}-growing-wrapper`);
+  if (windowType === "chat") {
+    let messageContainer = document.querySelector('#message-container');
+    let chatInput = document.querySelector(`.bx--text-input`);
+    growDiv.style.height = (messageContainer.clientHeight + chatInput.clientHeight) + "px";
+  } else {
+    let listUl = document.querySelector(`#${windowType}-list`);
+    growDiv.style.height = listUl.clientHeight + "px";
+  }
 }
 
 const generateCards = function(pickedCards) {
@@ -37,26 +35,18 @@ function cardClicked(e) {
 };
 
 function hideWindow(windowType) {
-  if (windowType === "chat") {
-    let chatGrowWrapper = document.getElementById('chat-growing-wrapper');
-    if (chatGrowWrapper.clientHeight) {
-      chatGrowWrapper.style.height = 0;
-    } else {
-      resetChatGrowingWrapper();
-    }
+  let growWrapper = document.getElementById(`${windowType}-growing-wrapper`);
+  if (growWrapper.clientHeight) {
+    growWrapper.style.height = 0;
   } else {
-    let playerGrowWrapper = document.getElementById('player-growing-wrapper');
-    if (playerGrowWrapper.clientHeight) {
-      playerGrowWrapper.style.height = 0;
-    } else {
-      resetPlayerGrowingWrapper();
-    }
+    resetGrowingWrapper(windowType);
   }
 }
 
 function adjustWindowSizes() {
-  resetChatGrowingWrapper();
-  resetPlayerGrowingWrapper();
+  resetGrowingWrapper("chat");
+  resetGrowingWrapper("player");
+  resetGrowingWrapper("card");
 }
 
 function resizeEvent() {
@@ -131,12 +121,11 @@ client.joinOrCreate("kings").then(room => {
       let li = document.createElement("li");
       li.className = "bx--list__item";
       li.innerHTML = `<p>${listOfPlayers[i]}</p>`;
-      document.querySelector("#player-list").appendChild(li);
+      playerList.appendChild(li);
     }
   });
 
   room.onMessage("updateCardsLeft", function(undefinedCards) {
-    let circleContainer = document.querySelector("#circle-list");
     if (undefinedCards.length) {
       let cardList = document.getElementsByClassName("card");
       for (let i = 0; i < cardList.length; i++) {
@@ -184,6 +173,17 @@ client.joinOrCreate("kings").then(room => {
 
   room.onMessage("generateCards", function(pickedCards) {
     generateCards(pickedCards);
+  });
+
+  room.onMessage("getCardCount", function(cardCount) {
+    let cardCountList = document.querySelector("#card-list");
+    document.querySelector("#card-list").innerHTML = '';
+    for (var i = 0; i < Object.keys(cardCount).length; i++) {
+      let li = document.createElement("li");
+      li.className = "bx--list__item";
+      li.innerHTML = `<p>${Object.keys(cardCount)[i]}: ${cardCount[Object.keys(cardCount)[i]]} left</p>`;
+      cardCountList.appendChild(li);
+    }
   });
 
   document.querySelector("#username-input-btn").onclick = function(e) {
