@@ -65,13 +65,8 @@ export class GameRoom extends Room {
 
   async onLeave(client: any, consented: boolean) {
     try {
-      if (!consented) {
-          throw new Error("consented leave");
-      }
-
       // allow disconnected client to reconnect into this room until 20 seconds
       await this.allowReconnection(client, 20);
-
       // client returned! let's re-activate it.
       client.send("generateCards", this.pickedCards);
       client.send("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
