@@ -30,6 +30,14 @@
         </div>
       </form>
     </div>
+    <div id="reconnect-overlay">
+      <form id="reconnect-form" onkeydown="return event.key !== 'Enter';">
+        <label id="disconnect-msg">Disconnected. Reconnect?</label>
+        <div>
+          <input type="submit" id="reconnect-btn" onclick="reconnect()" value="Reconnect" />
+        </div>
+      </form>
+    </div>
     <div id="container">
       <div id="chat-container">
         <div id="chat-window">

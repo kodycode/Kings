@@ -1,6 +1,5 @@
 var roomInstance = undefined;
 var host = window.document.location.host.replace(/:.*/, '');
-
 var client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (location.port ? ':' + location.port : ''));
 
 const resetGrowingWrapper = function (windowType) {
@@ -53,6 +52,23 @@ function resizeEvent() {
   adjustWindowSizes();
 }
 
+function reconnect() {
+  let p = document.createElement("p");
+  p.innerText = "Reconnecting...";
+  document.querySelector("#messages").appendChild(p);
+  let msg_container = document.querySelector("#message-container");
+  msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+  client.reconnect(roomInstance.id, roomInstance.sessionId).then(room => {
+    p.innerText = "Connected back in.";
+    document.querySelector("#messages").appendChild(p);
+    let msg_container = document.querySelector("#message-container");
+    msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+    document.querySelector("#reconnect-overlay").style.display = "none";
+  }).catch(e => {
+    console.log("join error", e);
+  });
+}
+
 adjustWindowSizes();
 
 outerHeight = window.outerHeight;
@@ -68,6 +84,17 @@ window.onresize = function(){
 
 client.joinOrCreate("kings").then(room => {
   roomInstance = room;
+
+  room.onLeave((code) => {
+    console.log(`Socket error code: ${code}`);
+    let p = document.createElement("p");
+    p.innerText = "Disconnected.";
+    document.querySelector("#messages").appendChild(p);
+    let msg_container = document.querySelector("#message-container");
+    msg_container.scrollTop = msg_container.scrollHeight - msg_container.clientHeight;
+    document.querySelector("#reconnect-overlay").style.display = "flex";
+  })
+
   room.onStateChange.once(function(state) {
     console.log("initial room state:", state);
   });

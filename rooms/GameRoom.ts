@@ -63,24 +63,38 @@ export class GameRoom extends Room {
     client.send("generateCards", this.pickedCards);
   }
 
-  onLeave(client: any) {
-    let delElementIndex = this.currentRound.indexOf(client.sessionId);
-    if (this.playerList[client.sessionId])
-      this.broadcast("userLeft", `${ this.playerList[client.sessionId] } left.`);
-    if (this.currentRound[0] === client.sessionId) {
-      if (this.currentRound.length > 1) {
-        this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[1]]}'s turn!`);
+  async onLeave(client: any, consented: boolean) {
+    try {
+      if (!consented) {
+          throw new Error("consented leave");
       }
-    }
-    delete this.playerList[client.sessionId];
-    if (this.currentRound.length && delElementIndex !== -1) {
-      this.currentRound.splice(delElementIndex, 1);
-      if (!this.currentRound.length) {
-        this.currentRound = Object.keys(this.playerList); 
-        this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+
+      // allow disconnected client to reconnect into this room until 20 seconds
+      await this.allowReconnection(client, 20);
+
+      // client returned! let's re-activate it.
+      client.send("generateCards", this.pickedCards);
+      client.send("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+      client.send("getCardCount", this.cardCount);
+    } catch (e) {
+      let delElementIndex = this.currentRound.indexOf(client.sessionId);
+      if (this.playerList[client.sessionId])
+        this.broadcast("userLeft", `${ this.playerList[client.sessionId] } left.`);
+      if (this.currentRound[0] === client.sessionId) {
+        if (this.currentRound.length > 1) {
+          this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[1]]}'s turn!`);
+        }
       }
+      delete this.playerList[client.sessionId];
+      if (this.currentRound.length && delElementIndex !== -1) {
+        this.currentRound.splice(delElementIndex, 1);
+        if (!this.currentRound.length) {
+          this.currentRound = Object.keys(this.playerList); 
+          this.broadcast("getTurn", `It's ${this.playerList[this.currentRound[0]]}'s turn!`);
+        }
+      }
+      this.broadcast("updatePlayerList", this.getPlayerNameList());
     }
-    this.broadcast("updatePlayerList", this.getPlayerNameList());
   }
 
   onDispose () {

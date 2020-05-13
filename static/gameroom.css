@@ -300,6 +300,7 @@ ul {
   width: 384px;
   height: 200px; }
 
+#reconnect-overlay,
 #username-overlay {
   position: fixed;
   width: 100vw;
@@ -315,9 +316,33 @@ ul {
   -webkit-transition: opacity 1s linear;
   transition: opacity 1s linear; }
 
-#username-form {
-  margin: auto; }
+#reconnect-overlay {
+  display: none; }
 
+#reconnect-form,
+#username-form {
+  margin: auto;
+  text-align: center; }
+
+#reconnect-btn {
+  display: inline-block;
+  padding: 4px;
+  font-size: 2vh;
+  outline: 0;
+  -webkit-appearance: none; }
+
+#reconnect-btn {
+  background-color: #7851A9;
+  color: white;
+  width: 17vh;
+  border: 2px solid #7851A9; }
+
+#reconnect-btn:hover {
+  transition: background-color 0.5s;
+  background-color: #646464;
+  border: 2px solid #646464; }
+
+#reconnect-form div input,
 #username-form div input,
 #username-input-btn {
   display: inline-block;
@@ -325,6 +350,10 @@ ul {
   font-size: 3vh;
   outline: 0;
   -webkit-appearance: none; }
+
+#reconnect-form label {
+  font-size: 3vh;
+  color: white; }
 
 #username-input-btn {
   background-color: #393939;
@@ -403,3 +432,6 @@ ul {
   -webkit-transition: height .5s;
   transition: height .5s;
   overflow: hidden; }
+
+#reconnect-container {
+  height: 10px; }
