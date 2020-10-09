@@ -10,7 +10,7 @@ import nodeSassMiddleware from "node-sass-middleware";
 
 import { GameRoom } from "./rooms/GameRoom";
 
-const port = Number(process.env.PORT || 6969);
+const port = Number(process.env.PORT || 7777);
 const app = express()
 
 app.use(cors());
